@@ -19,6 +19,14 @@ mix dockerize.init
 
 This command generates configurations for your project, including the `Dockerfile`.
 
+##### use different app name other the directory name
+
+By default, it guess the app is the same as directory name. If not, you can specify `--app` argument:
+
+```sh
+mix dockerize.init --app my_app
+```
+
 #### Build your docker image
 
 just run `docker build`, for example
@@ -26,6 +34,8 @@ just run `docker build`, for example
 ```sh
 docker build .
 ```
+
+For more information of `docker build`, please refer to the [official document](https://docs.docker.com/engine/reference/builder/).
 
 ##### use MIX_ENV other than `prod`
 
@@ -43,7 +53,9 @@ If you are in China, you may want to use some hex mirror:
 docker build --build-arg hex_mirror_url=https://hexpm.upyun.com .
 ```
 
-For more information of `docker build`, please refer to the [official document](https://docs.docker.com/engine/reference/builder/).
+### For Phoenix Projects
+
+Modify the generated `Dockerfile` follow the instruction in it.
 
 
 [Docker]: https://www.docker.com

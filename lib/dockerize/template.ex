@@ -18,10 +18,18 @@ defmodule Dockerize.Template do
 
   iex> Dockerize.Template.input_path("foo", base: "bar")
   "bar/priv/template/foo.eex"
+
+  iex> Dockerize.Template.input_path(".foo", base: "bar")
+  "bar/priv/template/_.foo.eex"
   """
-  def input_path(file, opts \\ []) do
-    Path.join([base_path(opts), "template", file <> ".eex"])
-  end
+
+  def input_path(file, opts \\ [])
+
+  def input_path("." <> file, opts),
+    do: input_path("_." <> file, opts)
+
+  def input_path(file, opts),
+    do: Path.join([base_path(opts), "template", file <> ".eex"])
 
   @doc """
   获取模板文件对应输出路径

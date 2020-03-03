@@ -32,9 +32,7 @@ defmodule Dockerize.Generate do
   end
 
   defp guess_app_name do
-    Mix.Project.config()
-    |> Keyword.get(:app)
-    |> to_string()
+    System.cwd() |> Path.basename()
   end
 
   defp gen_config(opts),
