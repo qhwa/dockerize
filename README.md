@@ -58,4 +58,12 @@ docker build --build-arg hex_mirror_url=https://hexpm.upyun.com .
 Modify the generated `Dockerfile` follow the instruction in it.
 
 
+## Docker images underhood
+
+There are two base docker used:
+
+* [elixir-runner](https://hub.docker.com/r/qhwa/elixir-runner) provide a final environment for running your release. This image is based on [Alpine] which is a very minimum Linux distribution.
+* [elixir-builder](https://hub.docker.com/r/qhwa/elixir-builder) is used for building the final minimum docker image to distribute.
+
 [Docker]: https://www.docker.com
+[Alpine]: https://alpinelinux.org
