@@ -32,7 +32,7 @@ defmodule Dockerize.Generate do
   end
 
   defp guess_app_name do
-    System.cwd() |> Path.basename()
+    File.cwd!() |> Path.basename()
   end
 
   defp gen_config(opts),
