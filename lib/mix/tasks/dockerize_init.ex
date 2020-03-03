@@ -10,7 +10,7 @@ defmodule Mix.Tasks.Dockerize.Init do
   Supported arguments:
 
   * `--app`
-  * `--overwrite`
+  * `--force`
   """
 
   def run(opts) do
@@ -21,7 +21,7 @@ defmodule Mix.Tasks.Dockerize.Init do
     OptionParser.parse(args,
       strict: [
         app: :string,
-        overwrite: :boolean,
+        force: :boolean,
         elixir_version: :string
       ]
     )

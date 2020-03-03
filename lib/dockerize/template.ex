@@ -84,7 +84,7 @@ defmodule Dockerize.Template do
   end
 
   defp confirm(output, opts) do
-    Keyword.get(opts, :overwrite) || yes?("Overwrite #{output}?")
+    Keyword.get(opts, :force) || yes?("Overwrite #{output}?")
   end
 
   defp yes?(question) do
