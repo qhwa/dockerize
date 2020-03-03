@@ -3,7 +3,7 @@ Dockerize is an Elixir hex package that helps you create [Docker] images from an
 ## Install
 
 ```sh
-mix archive.install github qhwa/dockerize
+mix archive.install hex dockerize
 ```
 ## Getting Started
 
