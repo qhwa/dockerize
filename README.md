@@ -1,5 +1,9 @@
 Dockerize is an Elixir package that helps you create [Docker] images from Elixir projects.
 
+## Prerequirements
+
+* Elixir >= 1.9
+
 ## Install
 
 ```sh
