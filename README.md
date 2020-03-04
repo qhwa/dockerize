@@ -7,7 +7,9 @@ mix archive.install hex dockerize
 ```
 ## Getting Started
 
-After installing, you can run this command in your project directory:
+#### Generate configurations from template
+
+Run this command in your project directory:
 
 ```sh
 mix dockerize.init
@@ -26,6 +28,11 @@ Then you are free to do anything with the built docker image, either run it loca
 For more information of `docker build`, please refer to the [official document](https://docs.docker.com/engine/reference/builder/).
 
 ## Customizing
+
+### For Phoenix Projects
+
+Modify the generated `Dockerfile`. Follow the instructions in it.
+
 
 ### use different app name other the directory name
 
@@ -50,11 +57,6 @@ If you are in China, you may want to use some hex mirror:
 ```sh
 docker build --build-arg hex_mirror_url=https://hexpm.upyun.com .
 ```
-
-### For Phoenix Projects
-
-Modify the generated `Dockerfile` follow the instruction in it.
-
 
 ## Docker images underhood
 
