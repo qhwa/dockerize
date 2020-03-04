@@ -68,7 +68,7 @@ There are two base docker images used:
 
 * [elixir-runner](https://hub.docker.com/r/qhwa/elixir-runner)
   * A final runtime environment for running your release.
-  * This image is based on [Alpine] which is a very minimum Linux distribution.
+  * This image is based on [Alpine] which is very small.
   * There are [some useful utility tools](https://github.com/qhwa/docker-elixir-runner#features) installed out of the box.
 
 * [elixir-builder](https://hub.docker.com/r/qhwa/elixir-builder)
