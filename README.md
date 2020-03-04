@@ -11,7 +11,7 @@ mix archive.install hex dockerize
 ```
 ## Getting Started
 
-#### Generate configurations from template
+#### 1. Generate configurations from template
 
 Run this command in your project directory:
 
@@ -19,7 +19,7 @@ Run this command in your project directory:
 mix dockerize.init
 ```
 
-#### Build your docker image
+#### 2. Build your docker image
 
 just run `docker build`, for example
 
@@ -27,7 +27,9 @@ just run `docker build`, for example
 docker build .
 ```
 
-Then you are free to do anything with the built docker image, either run it locally or distribute it to your infrastructures, e.g a Kubernete cluster.
+Done!
+
+Now you are free to do anything with the docker image built, either run it locally or host it on your infrastructures, e.g a Kubernete cluster.
 
 For more information of `docker build`, please refer to the [official document](https://docs.docker.com/engine/reference/builder/).
 
