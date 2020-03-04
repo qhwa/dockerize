@@ -40,7 +40,7 @@ For more information of `docker build`, please refer to the [official document](
 Modify the generated `Dockerfile`. Follow the instructions in it.
 
 
-#### use different app name other the directory name
+#### use different app name other than directory name
 
 By default, it speculates guess app_name from the directory name. You can change it by:
 
