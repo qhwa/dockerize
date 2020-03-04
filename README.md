@@ -33,12 +33,12 @@ For more information of `docker build`, please refer to the [official document](
 
 ## Customizing
 
-### For Phoenix Projects
+#### For Phoenix Projects
 
 Modify the generated `Dockerfile`. Follow the instructions in it.
 
 
-### use different app name other the directory name
+#### use different app name other the directory name
 
 By default, it speculates guess app_name from the directory name. You can change it by:
 
@@ -46,7 +46,7 @@ By default, it speculates guess app_name from the directory name. You can change
 mix dockerize.init --app my_app
 ```
 
-### use MIX_ENV other than `prod`
+#### use MIX_ENV other than `prod`
 
 By default, it build the image with `MIX_ENV=prod`. You can change `MIX_ENV` value by providing it as an build argument:
 
@@ -54,7 +54,7 @@ By default, it build the image with `MIX_ENV=prod`. You can change `MIX_ENV` val
 docker build --build-arg mix_env=dev .
 ```
 
-### use HEX_MIRROR other than default (https://repo.hex.pm)
+#### use HEX_MIRROR other than default (https://repo.hex.pm)
 
 If you are in China, you may want to use some hex mirror:
 
