@@ -13,20 +13,6 @@ After installing, you can run this command in your project directory:
 mix dockerize.init
 ```
 
-Default configurations will be generated, including:
-
-* `Dockerfile` - the entry for `docker build`;
-* `.dockerignore` - used for `docker build`;
-* `config/releases.exs` - the default empty runtime configuration for Elixir releases;
-
-##### use different app name other the directory name
-
-By default, it guess the app is the same as directory name. If not, you can specify `--app` argument:
-
-```sh
-mix dockerize.init --app my_app
-```
-
 #### Build your docker image
 
 just run `docker build`, for example
@@ -35,9 +21,21 @@ just run `docker build`, for example
 docker build .
 ```
 
+Then you are free to do anything with the built docker image, either run it locally or distribute it to your infrastructures, e.g a Kubernete cluster.
+
 For more information of `docker build`, please refer to the [official document](https://docs.docker.com/engine/reference/builder/).
 
-##### use MIX_ENV other than `prod`
+## Customizing
+
+### use different app name other the directory name
+
+By default, it speculates guess app_name from the directory name. You can change it by:
+
+```sh
+mix dockerize.init --app my_app
+```
+
+### use MIX_ENV other than `prod`
 
 By default, it build the image with `MIX_ENV=prod`. You can change `MIX_ENV` value by providing it as an build argument:
 
@@ -45,7 +43,7 @@ By default, it build the image with `MIX_ENV=prod`. You can change `MIX_ENV` val
 docker build --build-arg mix_env=dev .
 ```
 
-#### use HEX_MIRROR other than default (https://repo.hex.pm)
+### use HEX_MIRROR other than default (https://repo.hex.pm)
 
 If you are in China, you may want to use some hex mirror:
 
