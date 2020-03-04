@@ -74,7 +74,7 @@ There are two base docker images used:
 * [elixir-builder](https://hub.docker.com/r/qhwa/elixir-builder)
   * A build-time environment
   * Used for building the final minimum docker image to distribute.
-  * Suitable for CI/CD use.
+  * Suitable for CI/CD uses.
 
 [Docker]: https://www.docker.com
 [Alpine]: https://alpinelinux.org
