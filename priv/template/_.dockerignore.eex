@@ -4,3 +4,4 @@
 # prebuilt folder to speed up docker image generating.
 _build/
 deps/
+node_modules/
