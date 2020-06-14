@@ -11,6 +11,7 @@ defmodule Mix.Tasks.Dockerize.Init do
 
   * `--app`
   * `--force`
+  * `--phoenix` or `--no-phoenix`
   """
 
   def run(opts) do
@@ -22,6 +23,7 @@ defmodule Mix.Tasks.Dockerize.Init do
       strict: [
         app: :string,
         force: :boolean,
+        phoenix: :boolean,
         elixir_version: :string
       ]
     )
@@ -31,6 +33,7 @@ defmodule Mix.Tasks.Dockerize.Init do
 
       {_, args, []} ->
         IO.puts(["Unrecognized arguments: ", ANSI.red(), Enum.join(args, " "), ANSI.reset(), "\n"])
+
         print_usage()
         System.halt(1)
 
@@ -41,5 +44,5 @@ defmodule Mix.Tasks.Dockerize.Init do
     end
   end
 
-  defp print_usage, do: Mix.Tasks.Help.run(["dockerize.init"]) 
+  defp print_usage, do: Mix.Tasks.Help.run(["dockerize.init"])
 end
