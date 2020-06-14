@@ -29,7 +29,7 @@ defmodule Dockerize.Generate do
     |> Keyword.put_new(:app, guess_app_name())
     |> Keyword.put_new(:output, @default_output)
     |> Keyword.put_new(:elixir_version, @default_elixir_version)
-    |> Keyword.put_new(:phoenix, has_phoenix?())
+    |> Keyword.put_new(:phoenix_assets, has_phoenix?())
   end
 
   defp guess_app_name, do: File.cwd!() |> Path.basename()

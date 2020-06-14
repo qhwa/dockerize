@@ -11,7 +11,7 @@ defmodule Mix.Tasks.Dockerize.Init do
 
   * `--app`
   * `--force`
-  * `--phoenix` or `--no-phoenix`
+  * `--phoenix-assets` or `--no-phoenix-assets`
   """
 
   def run(opts) do
@@ -23,7 +23,7 @@ defmodule Mix.Tasks.Dockerize.Init do
       strict: [
         app: :string,
         force: :boolean,
-        phoenix: :boolean,
+        phoenix_assets: :boolean,
         elixir_version: :string
       ]
     )
