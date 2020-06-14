@@ -33,6 +33,12 @@ Now you are free to do anything with the docker image built, either run it local
 
 For more information of `docker build`, please refer to the [official document](https://docs.docker.com/engine/reference/builder/).
 
+Optionally, you can use [docker buildkit](https://docs.docker.com/develop/develop-images/build_enhancements/) for better performance:
+
+```sh
+DOCKER_BUILDKIT=1 docker build .
+```
+
 ## Customizing
 
 #### For Phoenix projects
