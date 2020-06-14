@@ -35,14 +35,13 @@ For more information of `docker build`, please refer to the [official document](
 
 ## Customizing
 
-#### For Phoenix Projects
+#### For Phoenix projects
 
-Modify the generated `Dockerfile`. Follow the instructions in it.
+By default, it guess if in a phoenix project from the `mix.exs` configuration. So you don't do anything specially.
 
+#### Use different app name other than directory name
 
-#### use different app name other than directory name
-
-By default, it speculates guess app_name from the directory name. You can change it by:
+By default, it speculates app_name from the directory name. You can change it by:
 
 ```sh
 mix dockerize.init --app my_app

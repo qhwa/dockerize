@@ -39,11 +39,17 @@ WORKDIR /src
 ARG MIX_ENV=prod
 
 COPY lib/ ./lib
+
+<%= if phoenix do %>
 COPY priv/ ./priv
+<% else %>
+# You may add other directories crucial for compiling, for example:
+# COPY priv/ ./priv
+<% end %>
 
 RUN mix compile
 
-<%= if with_phoenix_assets do %>
+<%= if phoenix do %>
 
 # -----------------------------------
 # - stage: build
@@ -71,7 +77,7 @@ RUN npm rebuild node-sass
 
 COPY assets/ ./
 
-RUN npm run deploy￼
+RUN npm run deploy
 
 # -----------------------------------
 # - stage: build
@@ -98,7 +104,7 @@ WORKDIR /src
 
 ARG MIX_ENV=prod
 
-<%= if with_phoenix_assets do %>
+<%= if phoenix do %>
 COPY --from=digest /src/priv/static ./priv/static
 <% end %>
 
@@ -116,7 +122,7 @@ ARG MIX_ENV=prod
 
 User nobody
 
-COPY --from=mix_release --chown=nobody: /app /app
+COPY --from=mix_release --chown=nobody /app /app
 
 WORKDIR /app
 
