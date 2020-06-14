@@ -25,6 +25,9 @@ just run `docker build`, for example
 
 ```sh
 docker build .
+
+# or optionally run with buildkit:
+# DOCKER_BUILDKIT=1 docker build .
 ```
 
 Done!
@@ -33,17 +36,11 @@ Now you are free to do anything with the docker image built, either run it local
 
 For more information of `docker build`, please refer to the [official document](https://docs.docker.com/engine/reference/builder/).
 
-Optionally, you can use [docker buildkit](https://docs.docker.com/develop/develop-images/build_enhancements/) for better performance:
-
-```sh
-DOCKER_BUILDKIT=1 docker build .
-```
-
 ## Customizing
 
-#### For Phoenix projects
+#### Phoenix projects without assets
 
-By default, it guess if in a phoenix project from the `mix.exs` configuration. So you don't do anything specially.
+By default, it speculates if it's running in a phoenix project or not, by information from `Mix.Project.config()`. So basically you have to do nothing specially. But if your phoenix project doesn't have assets, you could use the `--no-phoenix-assets` parameter on generating the `Dockerfile`.
 
 #### Use different app name other than directory name
 

@@ -11,8 +11,7 @@ ARG HEX_MIRROR_URL=https://repo.hex.pm
 
 WORKDIR /src
 
-COPY config/ ./config
-COPY mix.exs mix.lock /src/
+COPY config mix.exs mix.lock /src/
 
 RUN mix deps.get --only $MIX_ENV
 
@@ -40,7 +39,7 @@ ARG MIX_ENV=prod
 
 COPY lib/ ./lib
 
-<%= if phoenix do %>
+<%= if phoenix_assets do %>
 COPY priv/ ./priv
 <% else %>
 # You may add other directories crucial for compiling, for example:
@@ -49,7 +48,7 @@ COPY priv/ ./priv
 
 RUN mix compile
 
-<%= if phoenix do %>
+<%= if phoenix_assets do %>
 
 # -----------------------------------
 # - stage: build
@@ -104,7 +103,7 @@ WORKDIR /src
 
 ARG MIX_ENV=prod
 
-<%= if phoenix do %>
+<%= if phoenix_assets do %>
 COPY --from=digest /src/priv/static ./priv/static
 <% end %>
 
@@ -122,7 +121,7 @@ ARG MIX_ENV=prod
 
 User nobody
 
-COPY --from=mix_release --chown=nobody /app /app
+COPY --from=mix_release --chown=nobody:nobody /app /app
 
 WORKDIR /app
 
