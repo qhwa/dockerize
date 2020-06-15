@@ -14,6 +14,10 @@ defmodule SimpleApp do
   end
 
   defmodule Server do
+    @moduledoc """
+    Server module.
+    """
+
     import Plug.Conn
 
     def init(_), do: []
