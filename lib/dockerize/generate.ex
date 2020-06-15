@@ -36,7 +36,6 @@ defmodule Dockerize.Generate do
 
   defp has_phoenix? do
     Mix.Project.config()
-    |> Kernel.||([])
     |> Keyword.get(:deps, [])
     |> Enum.any?(&(elem(&1, 0) == :phoenix))
   end
