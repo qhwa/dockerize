@@ -6,7 +6,7 @@ defmodule Dockerize.MixProject do
       app: :dockerize,
       description: "A tool for creating docker image from an Elixir project.",
       license: "",
-      version: "0.1.2",
+      version: "0.2.0-alpha.1",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -26,7 +26,8 @@ defmodule Dockerize.MixProject do
     [
       {:credo, ">= 0.0.0", only: :dev, runtime: false},
       {:dialyxir, "~> 1.0.0-rc.7", only: :dev, runtime: false},
-      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
+      {:git_hooks, "~> 0.4", only: :dev, runtime: false}
     ]
   end
 
