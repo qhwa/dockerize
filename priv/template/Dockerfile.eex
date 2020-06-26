@@ -119,11 +119,11 @@ FROM qhwa/elixir-runner:<%= elixir_version %> AS release_image
 ARG APP_REVISION=latest
 ARG MIX_ENV=prod
 
-User nobody
+RUN chown nobody:nobody /app
+
+USER nobody
 
 COPY --from=mix_release --chown=nobody:nobody /app /app
-
-WORKDIR /app
 
 ENTRYPOINT ["/app/bin/<%= app %>"]
 CMD ["start"]
