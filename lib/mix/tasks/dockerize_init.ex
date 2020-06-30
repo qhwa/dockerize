@@ -10,12 +10,16 @@ defmodule Mix.Tasks.Dockerize.Init do
   Supported arguments:
 
   * `--app`
+  * `--path`
   * `--force`
   * `--phoenix-assets` or `--no-phoenix-assets`
+  * `--elixir-version`
   """
 
   def run(opts) do
-    parse_args(opts) |> Dockerize.Generate.gen()
+    parse_args(opts)
+    |> Keyword.put(:gen_command, Enum.join(["mix dockerize.init" | opts], " "))
+    |> Dockerize.Generate.gen()
   end
 
   defp parse_args(args) do
@@ -24,7 +28,8 @@ defmodule Mix.Tasks.Dockerize.Init do
         app: :string,
         force: :boolean,
         phoenix_assets: :boolean,
-        elixir_version: :string
+        elixir_version: :string,
+        path: :string
       ]
     )
     |> case do

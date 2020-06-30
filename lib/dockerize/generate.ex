@@ -24,20 +24,39 @@ defmodule Dockerize.Generate do
     gen_docker_file(opts)
   end
 
-  defp with_defaults(opts) do
-    opts
-    |> Keyword.put_new(:app, guess_app_name())
-    |> Keyword.put_new(:output, @default_output)
-    |> Keyword.put_new(:elixir_version, @default_elixir_version)
-    |> Keyword.put_new(:phoenix_assets, has_phoenix?())
+  defp with_defaults(opts), do: Keyword.merge(default_opts(opts), opts)
+
+  defp default_opts(opts) do
+    prefix = opts[:path] || ""
+
+    [
+      app: guess_app_name(prefix),
+      output: default_output_path(prefix),
+      elixir_version: @default_elixir_version,
+      phoenix_assets: has_phoenix?(prefix),
+      gen_command: nil
+    ]
   end
 
-  defp guess_app_name, do: File.cwd!() |> Path.basename()
+  defp guess_app_name(prefix), do: Path.expand(prefix) |> Path.basename()
 
-  defp has_phoenix? do
-    Mix.Project.config()
-    |> Keyword.get(:deps, [])
-    |> Enum.any?(&(elem(&1, 0) == :phoenix))
+  defp default_output_path(prefix), do: Path.join(prefix, @default_output)
+
+  defp has_phoenix?("") do
+    Mix.Project.deps_paths()
+    |> Map.has_key?(:phoenix)
+  end
+
+  defp has_phoenix?(prefix) do
+    Mix.Project.in_project(nil, prefix, fn
+      nil ->
+        false
+
+      module ->
+        module.project()
+        |> Keyword.get(:deps, [])
+        |> Keyword.has_key?(:phoenix)
+    end)
   end
 
   defp gen_config(opts),
