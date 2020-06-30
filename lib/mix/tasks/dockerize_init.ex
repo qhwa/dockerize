@@ -37,7 +37,13 @@ defmodule Mix.Tasks.Dockerize.Init do
         options
 
       {_, args, []} ->
-        IO.puts(["Unrecognized arguments: ", ANSI.red(), Enum.join(args, " "), ANSI.reset(), "\n"])
+        IO.puts([
+          "Unrecognized arguments: ",
+          ANSI.red(),
+          Enum.map_join(args, " ", &Kernel.inspect/1),
+          ANSI.reset(),
+          "\n"
+        ])
 
         print_usage()
         System.halt(1)
