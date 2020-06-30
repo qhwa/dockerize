@@ -16,4 +16,4 @@ import Config
 #      database: System.fetch_env!("DB_DATABASE"),
 #      pool_size: 20
 
-# config :phoenix_app, :secret_key, System.fetch_env!("MY_APP_SECRET_KEY")
+# config :my_phx_app, :secret_key, System.fetch_env!("MY_APP_SECRET_KEY")
