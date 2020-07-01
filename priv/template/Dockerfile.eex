@@ -9,6 +9,8 @@
 # It leverages multi-stage-building of docker to build as fast as possible.
 # How stages work together: https://user-images.githubusercontent.com/43009/84713978-e59a2700-af9e-11ea-9bbd-9dcf28d23da7.png
 
+# You are free to edit this dockerfile.
+
 # -----------------------------------
 # - stage: install
 # - job: dependencies
