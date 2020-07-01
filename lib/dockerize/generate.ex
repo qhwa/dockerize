@@ -48,7 +48,7 @@ defmodule Dockerize.Generate do
   end
 
   defp has_phoenix?(prefix) do
-    Mix.Project.in_project(nil, prefix, fn
+    Mix.Project.in_project(String.to_atom(prefix), prefix, fn
       nil ->
         false
 
