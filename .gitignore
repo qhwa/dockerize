@@ -22,4 +22,5 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 dockerize-*.tar
 
-test_projects/*/Dockerfile
+test_projects/
+!test_projects/*/Dockerfile
