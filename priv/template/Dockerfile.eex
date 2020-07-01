@@ -13,6 +13,8 @@
 # - stage: install
 # - job: dependencies
 # -----------------------------------
+
+# see: https://github.com/qhwa/docker-elixir-builder
 FROM qhwa/elixir-builder:<%= elixir_version %> AS deps
 
 ARG MIX_ENV=prod
@@ -123,6 +125,7 @@ RUN mix release --path /app --quiet
 # - job: release_image
 # -----------------------------------
 
+# See: https://github.com/qhwa/docker-elixir-runner
 FROM qhwa/elixir-runner:<%= elixir_version %> AS release_image
 
 ARG APP_REVISION=latest
