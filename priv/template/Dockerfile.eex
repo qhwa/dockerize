@@ -12,15 +12,79 @@
 # You are free to edit this dockerfile.
 
 # -----------------------------------
+# Base Image #1: Elixir Builder
+# - This is used for building later
+#   docker image, with a development
+#   toolset.
+# -----------------------------------
+FROM elixir:<%= elixir_version %>-alpine AS elixir-builder
+
+<%= if apk_mirror != :default do %>
+RUN sed -i \
+  s/dl-cdn.alpinelinux.org/<%= apk_mirror %>/g \
+  /etc/apk/repositories
+<% end %>
+
+RUN apk update --no-cache && \
+  apk add --no-cache \
+    bash \
+    nodejs \
+    yarn \
+    npm \
+    git \
+    alpine-sdk \
+    coreutils \
+    tzdata \
+    openssl-dev
+
+<%= if hex_mirror != :default do %>
+ENV HEX_MIRROR <%= hex_mirror %>
+<% end %>
+
+RUN mix local.hex --force
+RUN mix local.rebar --force
+
+RUN mkdir -p /root/.config/rebar3 && \
+  echo '{plugins, [rebar3_hex]}.' > /root/.config/rebar3/rebar.config
+
+RUN /root/.mix/rebar3 plugins upgrade rebar3_hex
+
+# -----------------------------------
+# Base Image #2: Elixir Runner
+# - Elixir Application Runner
+#   This is used as a simple operating
+#   system image to host your
+#   application
+# -----------------------------------
+FROM frolvlad/alpine-glibc:alpine-3.13_glibc-2.32 as elixir-runner
+
+<%= if apk_mirror != :default do %>
+RUN sed -i \
+  s/dl-cdn.alpinelinux.org/<%= apk_mirror %>/g \
+  /etc/apk/repositories
+<% end %>
+
+RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
+  apk update --no-cache && \
+  apk add --no-cache \
+    bash \
+    coreutils \
+    sysstat \
+    iftop \
+    procps \
+    libstdc++
+
+# -----------------------------------
 # - stage: install
 # - job: dependencies
 # -----------------------------------
-
-# see: https://github.com/qhwa/docker-elixir-builder
-FROM qhwa/elixir-builder:<%= elixir_version %> AS deps
+FROM elixir-builder AS deps
 
 ARG MIX_ENV=prod
-ARG HEX_MIRROR_URL=https://repo.hex.pm
+
+<%= if hex_mirror != :default do %>
+ARG HEX_MIRROR_URL=<%= hex_mirror %>
+<% end %>
 
 WORKDIR /src
 
@@ -37,10 +101,7 @@ FROM deps AS compile_deps
 WORKDIR /src
 
 ARG MIX_ENV=prod
-ARG APPSIGNAL_HTTP_PROXY
-
 RUN mix deps.compile
-
 
 # -----------------------------------
 # - stage: build
@@ -75,7 +136,6 @@ WORKDIR /src/assets
 COPY assets/package.json assets/package-lock.json ./
 
 ARG NPM_REGISTRY=https://registry.npmjs.com/
-ARG APPSIGNAL_HTTP_PROXY
 
 RUN npm \
   --registry ${NPM_REGISTRY} \
@@ -126,14 +186,10 @@ RUN mix release --path /app --quiet
 # - stage: release
 # - job: release_image
 # -----------------------------------
-
-# See: https://github.com/qhwa/docker-elixir-runner
-FROM qhwa/elixir-runner:<%= elixir_version %> AS release_image
+FROM elixir-runner AS release_image
 
 ARG APP_REVISION=latest
 ARG MIX_ENV=prod
-
-RUN chown nobody:nobody /app
 
 USER nobody
 
