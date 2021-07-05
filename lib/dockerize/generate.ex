@@ -12,7 +12,7 @@ defmodule Dockerize.Generate do
   """
 
   @default_output ""
-  @default_elixir_version "latest"
+  @default_elixir_version "1.12"
 
   @configs ~w[config/releases.exs]
   @dockerfiles ~w[Dockerfile .dockerignore]
@@ -34,7 +34,9 @@ defmodule Dockerize.Generate do
       output: default_output_path(prefix),
       elixir_version: @default_elixir_version,
       phoenix_assets: has_phoenix?(prefix),
-      gen_command: nil
+      gen_command: nil,
+      hex_mirror: :default,
+      apk_mirror: :default
     ]
   end
 
