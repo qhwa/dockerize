@@ -66,20 +66,6 @@ If you are in China, you may want to use some hex mirror:
 docker build --build-arg hex_mirror_url=https://hexpm.upyun.com .
 ```
 
-## Docker images underhood
-
-There are two base docker images used:
-
-* [elixir-runner](https://hub.docker.com/r/qhwa/elixir-runner)
-  * A final runtime environment for running your release.
-  * This image is based on [Alpine] which is very small.
-  * There are [some useful utility tools](https://github.com/qhwa/docker-elixir-runner#features) installed out of the box.
-
-* [elixir-builder](https://hub.docker.com/r/qhwa/elixir-builder)
-  * A build-time environment
-  * Used for building the final minimum docker image to distribute.
-  * Suitable for CI/CD uses.
-
 [Docker]: https://www.docker.com
 [Elixir]: https://elixir-lang.org
 [Alpine]: https://alpinelinux.org
