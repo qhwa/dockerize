@@ -24,10 +24,7 @@ mix dockerize.init
 just run `docker build`, for example
 
 ```sh
-docker build .
-
-# or optionally run with buildkit:
-# DOCKER_BUILDKIT=1 docker build .
+DOCKER_BUILDKIT=1 docker build .
 ```
 
 Done!
