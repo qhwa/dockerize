@@ -34,9 +34,7 @@ defmodule Dockerize.Generate do
       output: default_output_path(prefix),
       elixir_version: @default_elixir_version,
       phoenix_assets: has_phoenix?(prefix),
-      gen_command: nil,
-      hex_mirror: :default,
-      apk_mirror: :default
+      gen_command: nil
     ]
   end
 
