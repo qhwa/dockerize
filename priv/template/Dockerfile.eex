@@ -19,9 +19,8 @@
 # -----------------------------------
 FROM elixir:<%= elixir_version %> AS elixir-builder
 
-<%= if hex_mirror != :default do %>
-ENV HEX_MIRROR <%= hex_mirror %>
-<% end %>
+# If you're using a hex mirror:
+# ARG HEX_MIRROR=https://my_hex_mirror
 
 RUN mix local.hex --force
 RUN mix local.rebar --force
@@ -63,9 +62,8 @@ FROM elixir-builder AS deps
 
 ARG MIX_ENV=prod
 
-<%= if hex_mirror != :default do %>
-ARG HEX_MIRROR_URL=<%= hex_mirror %>
-<% end %>
+# If you're using a hex mirror:
+# ARG HEX_MIRROR=https://my_hex_mirror
 
 WORKDIR /src
 

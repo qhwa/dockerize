@@ -14,8 +14,6 @@ defmodule Mix.Tasks.Dockerize.Init do
   * `--force`
   * `--phoenix-assets` or `--no-phoenix-assets`
   * `--elixir-version`
-  * `--hex-mirror`
-  * `--apk-mirror`
   """
 
   def run(opts) do
@@ -31,8 +29,6 @@ defmodule Mix.Tasks.Dockerize.Init do
         force: :boolean,
         phoenix_assets: :boolean,
         elixir_version: :string,
-        hex_mirror: :string,
-        apk_mirror: :string,
         path: :string
       ]
     )
