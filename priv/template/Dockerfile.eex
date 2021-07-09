@@ -17,25 +17,7 @@
 #   docker image, with a development
 #   toolset.
 # -----------------------------------
-FROM elixir:<%= elixir_version %>-alpine AS elixir-builder
-
-<%= if apk_mirror != :default do %>
-RUN sed -i \
-  s/dl-cdn.alpinelinux.org/<%= apk_mirror %>/g \
-  /etc/apk/repositories
-<% end %>
-
-RUN apk update --no-cache && \
-  apk add --no-cache \
-    bash \
-    nodejs \
-    yarn \
-    npm \
-    git \
-    alpine-sdk \
-    coreutils \
-    tzdata \
-    openssl-dev
+FROM elixir:<%= elixir_version %> AS elixir-builder
 
 <%= if hex_mirror != :default do %>
 ENV HEX_MIRROR <%= hex_mirror %>
@@ -56,23 +38,22 @@ RUN /root/.mix/rebar3 plugins upgrade rebar3_hex
 #   system image to host your
 #   application
 # -----------------------------------
-FROM frolvlad/alpine-glibc:alpine-3.13_glibc-2.32 as elixir-runner
+FROM debian:buster as elixir-runner
 
-<%= if apk_mirror != :default do %>
-RUN sed -i \
-  s/dl-cdn.alpinelinux.org/<%= apk_mirror %>/g \
-  /etc/apk/repositories
-<% end %>
+# You can add any libraries required by your application
+# here:
 
-RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
-  apk update --no-cache && \
-  apk add --no-cache \
-    bash \
-    coreutils \
-    sysstat \
-    iftop \
-    procps \
-    libstdc++
+RUN apt-get update && \
+  apt-get install -y \
+  # If you're using `:crypto`, you'll need openssl installed \
+  libssl-dev \
+  locales
+
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
+    locale-gen
+ENV LANG en_US.UTF-8  
+ENV LANGUAGE en_US:en  
+ENV LC_ALL en_US.UTF-8
 
 # -----------------------------------
 # - stage: install
@@ -90,6 +71,16 @@ WORKDIR /src
 
 COPY config /src/config
 COPY mix.exs mix.lock /src/
+
+# If inside an umbrella project, you also need to add all `mix.exs`
+# e.g
+# COPY apps/my_app_1/mix.exs /src/apps/my_app_1/mix.exs
+# COPY apps/my_app_2/mix.exs /src/apps/my_app_2/mix.exs
+
+# If you're using your own organization on hex.pm, uncomment the
+# following lines:
+# ARG HEX_AUTH_KEY
+# RUN mix hex.organization auth my_org --key ${HEX_AUTH_KEY}
 
 RUN mix deps.get --only $MIX_ENV
 
@@ -193,7 +184,8 @@ ARG MIX_ENV=prod
 
 USER nobody
 
-COPY --from=mix_release --chown=nobody:nobody /app /app
+COPY --from=mix_release --chown=nobody:nogroup /app /app
 
+WORKDIR /app
 ENTRYPOINT ["/app/bin/<%= app %>"]
 CMD ["start"]
