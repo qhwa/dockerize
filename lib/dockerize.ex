@@ -1,5 +1,3 @@
 defmodule Dockerize do
-  @moduledoc """
-  Documentation for `Dockerize`.
-  """
+  @moduledoc false
 end
