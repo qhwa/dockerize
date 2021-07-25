@@ -14,17 +14,17 @@ defmodule Dockerize.Generate do
   @default_output ""
   @default_elixir_version "1.12"
 
-  @configs ~w[config/releases.exs]
-  @dockerfiles ~w[Dockerfile .dockerignore]
+  @config_files ~w[config/releases.exs]
+  @docker_files ~w[Dockerfile .dockerignore]
 
   def gen(opts) do
     opts = with_defaults(opts)
 
-    gen_config(opts)
-    gen_docker_file(opts)
+    do_gen(@config_files ++ @docker_files, opts)
   end
 
-  defp with_defaults(opts), do: Keyword.merge(default_opts(opts), opts)
+  defp with_defaults(opts),
+    do: Keyword.merge(default_opts(opts), opts)
 
   defp default_opts(opts) do
     prefix = opts[:path] || ""
@@ -38,7 +38,11 @@ defmodule Dockerize.Generate do
     ]
   end
 
-  defp guess_app_name(prefix), do: Path.expand(prefix) |> Path.basename()
+  defp guess_app_name(prefix),
+    do: Path.expand(prefix) |> Path.basename() |> underscore()
+
+  defp underscore(path),
+    do: String.replace(path, "-", "_")
 
   defp default_output_path(prefix), do: Path.join(prefix, @default_output)
 
@@ -59,9 +63,8 @@ defmodule Dockerize.Generate do
     end)
   end
 
-  defp gen_config(opts),
-    do: Template.generate_from_templates(@configs, opts)
-
-  defp gen_docker_file(opts),
-    do: Template.generate_from_templates(@dockerfiles, opts)
+  defp do_gen(templates, opts) do
+    {gen_opts, values} = Keyword.split(opts, [:force, :base, :output])
+    Enum.each(templates, &Template.generate_from_template(&1, values, gen_opts))
+  end
 end
