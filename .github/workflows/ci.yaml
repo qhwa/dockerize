@@ -1,0 +1,216 @@
+name: CI
+
+on: push
+
+jobs:
+  deps:
+    env:
+      MIX_ENV: test
+    name: Dependencies
+    runs-on: ubuntu-16.04
+    strategy:
+      matrix:
+        elixir: [1.12]
+        otp: [24.0]
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.6.0
+        with:
+          access_token: ${{ github.token }}
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup
+        uses: erlef/setup-elixir@v1
+        with:
+          elixir-version: ${{ matrix.elixir }}
+          otp-version: ${{ matrix.otp }}
+
+      - name: Retrieve Cached Dependencies
+        uses: actions/cache@v2
+        id: mix-cache
+        with:
+          path: |
+            deps
+            _build
+          key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-plt-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+
+      - name: Install Dependencies
+        if: steps.mix-cache.outputs.cache-hit != 'true'
+        run: |
+          mix local.rebar --force
+          mix local.hex --force
+          mix deps.get
+          mix deps.compile
+
+  gen_plt_cache:
+    name: PLT_cache
+    runs-on: ubuntu-16.04
+    strategy:
+      matrix:
+        elixir: [1.12]
+        otp: [24.0]
+    needs:
+      - deps
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup
+        uses: erlef/setup-elixir@v1
+        with:
+          elixir-version: ${{ matrix.elixir }}
+          otp-version: ${{ matrix.otp }}
+
+      - name: Retrieve Cached Dependencies
+        uses: actions/cache@v2
+        id: plt-cache
+        with:
+          path: |
+            deps
+            _build
+            priv/plts
+          key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-plt-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+
+      - name: Install Dependencies
+        if: steps.plt-cache.outputs.cache-hit != 'true'
+        run: |
+          mix deps.get
+          mix deps.compile
+
+          mix dialyzer --plt
+  lint:
+    env:
+      MIX_ENV: test
+    runs-on: ubuntu-16.04
+    strategy:
+      matrix:
+        elixir: [1.12]
+        otp: [24.0]
+    needs:
+      - deps
+    steps:
+      - uses: actions/checkout@v2
+      - uses: erlef/setup-elixir@v1
+        with:
+          elixir-version: ${{ matrix.elixir }}
+          otp-version: ${{ matrix.otp }}
+
+
+      - name: Retrieve Cached Dependencies
+        uses: actions/cache@v2
+        id: mix-cache
+        with:
+          path: |
+            deps
+            _build
+          key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-plt-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+
+      - name: Fetch dependencies
+        if: steps.mix-cache.outputs.cache-hit != 'true'
+        run: mix deps.get
+      - name: ==> 🔎 Lint
+        run: mix credo
+
+  dialyze:
+    env:
+      MIX_ENV: test
+    runs-on: ubuntu-16.04
+    strategy:
+      matrix:
+        elixir: [1.12]
+        otp: [24.0]
+    needs:
+      - gen_plt_cache
+    steps:
+      - uses: actions/checkout@v2
+      - uses: erlef/setup-elixir@v1
+        with:
+          elixir-version: ${{ matrix.elixir }}
+          otp-version: ${{ matrix.otp }}
+
+      - uses: actions/cache@v2
+        env:
+          cache-name: cache-elixir-deps
+        with:
+          path: |
+            deps
+            _build
+            priv/plts
+
+          key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-plt-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+
+      - name: Fetch dependencies
+        run: mix deps.get
+      - name: ==> 🔎 Static dialyze
+        run: mix dialyzer
+
+  check_format:
+    env:
+      MIX_ENV: test
+    runs-on: ubuntu-16.04
+    strategy:
+      matrix:
+        elixir: [1.12]
+        otp: [24.0]
+    needs:
+      - deps
+    steps:
+      - uses: actions/checkout@v2
+      - uses: erlef/setup-elixir@v1
+        with:
+          elixir-version: ${{ matrix.elixir }}
+          otp-version: ${{ matrix.otp }}
+
+      - name: Retrieve Cached Dependencies
+        uses: actions/cache@v2
+        id: mix-cache
+        with:
+          path: |
+            deps
+            _build
+          key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-plt-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+
+      - name: Fetch dependencies
+        if: steps.mix-cache.outputs.cache-hit != 'true'
+        run: mix deps.get
+      - name: ==> 🔎 Format check
+        run: mix format --check-formatted
+
+  test:
+    runs-on: ubuntu-16.04
+    strategy:
+      matrix:
+        elixir: [1.12]
+        otp: [24.0]
+    needs:
+      - deps
+    env:
+      MIX_ENV: test
+      DB_URL: ecto://postgres:postgres@localhost:5432/match_service_test
+    steps:
+      - uses: actions/checkout@v2
+      - uses: erlef/setup-elixir@v1
+        with:
+          elixir-version: ${{ matrix.elixir }}
+          otp-version: ${{ matrix.otp }}
+
+      - name: Retrieve Cached Dependencies
+        uses: actions/cache@v2
+        id: mix-cache
+        with:
+          path: |
+            deps
+            _build
+          key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-plt-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+
+      - name: Fetch dependencies
+        if: steps.mix-cache.outputs.cache-hit != 'true'
+        run: mix deps.get
+      - name: ==> 🔎 Integrating test
+        run: mix test --max-failures 1 --exclude pending
