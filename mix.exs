@@ -7,7 +7,7 @@ defmodule Dockerize.MixProject do
       description: "A tool for creating docker image from an Elixir project.",
       license: "",
       version: "1.0.0-pre.1",
-      elixir: "~> 1.10",
+      elixir: ">= 1.10.0",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       package: package()
