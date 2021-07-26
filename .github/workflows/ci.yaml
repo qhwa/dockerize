@@ -36,7 +36,7 @@ jobs:
           path: |
             deps
             _build
-          key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-plt-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+          key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
 
       - name: Install Dependencies
         if: steps.mix-cache.outputs.cache-hit != 'true'
@@ -48,6 +48,8 @@ jobs:
 
   gen_plt_cache:
     name: PLT_cache
+    env:
+      MIX_ENV: test
     runs-on: ubuntu-16.04
     strategy:
       matrix:
@@ -75,7 +77,7 @@ jobs:
             deps
             _build
             priv/plts
-          key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-plt-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+          key: plt-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
 
       - name: Install Dependencies
         if: steps.plt-cache.outputs.cache-hit != 'true'
@@ -109,7 +111,7 @@ jobs:
           path: |
             deps
             _build
-          key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-plt-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+          key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
 
       - name: Fetch dependencies
         if: steps.mix-cache.outputs.cache-hit != 'true'
@@ -143,7 +145,7 @@ jobs:
             _build
             priv/plts
 
-          key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-plt-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+          key: plt-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
 
       - name: Fetch dependencies
         run: mix deps.get
@@ -174,7 +176,7 @@ jobs:
           path: |
             deps
             _build
-          key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-plt-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+          key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
 
       - name: Fetch dependencies
         if: steps.mix-cache.outputs.cache-hit != 'true'
@@ -207,7 +209,7 @@ jobs:
           path: |
             deps
             _build
-          key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-plt-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+          key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
 
       - name: Fetch dependencies
         if: steps.mix-cache.outputs.cache-hit != 'true'
