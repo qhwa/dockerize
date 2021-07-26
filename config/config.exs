@@ -7,16 +7,14 @@ if Mix.env() != :prod do
     hooks: [
       pre_commit: [
         tasks: [
-          "mix format --check-formatted"
+          {:cmd, "mix format --check-formatted"}
         ]
       ],
       pre_push: [
         verbose: false,
         tasks: [
-          "mix credo",
-          "mix dialyzer",
-          "mix test",
-          "echo 'success!'"
+          {:mix_task, :credo},
+          {:mix_task, :test}
         ]
       ]
     ]
