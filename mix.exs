@@ -24,8 +24,8 @@ defmodule Dockerize.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:credo, ">= 0.0.0", only: :dev, runtime: false},
-      {:dialyxir, "~> 1.0.0-rc.7", only: :dev, runtime: false},
+      {:credo, ">= 0.0.0", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.0.0-rc.7", only: [:dev, :test], runtime: false},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:git_hooks, "~> 0.4", only: [:dev, :test], runtime: false}
     ]
