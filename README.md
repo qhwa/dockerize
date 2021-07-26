@@ -76,6 +76,10 @@ In some cases, you may want to use some hex mirror, with the following command:
 docker build --build-arg hex_mirror_url=https://hexpm.upyun.com .
 ```
 
+## License
+
+MIT
+
 [Docker]: https://www.docker.com
 [Elixir]: https://elixir-lang.org
 [Alpine]: https://alpinelinux.org
