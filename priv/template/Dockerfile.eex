@@ -120,26 +120,34 @@ RUN mix compile
 # -----------------------------------
 FROM deps AS assets
 
+## -- BEGIN assets building with Node.js, npm, webpack
+
 WORKDIR /src/assets
 
 COPY assets/package.json assets/package-lock.json ./
 
-ARG NPM_REGISTRY=https://registry.npmjs.com/
-
+ENV NPM_REGISTRY=https://registry.npmjs.com/
 RUN npm \
   --registry ${NPM_REGISTRY} \
   --prefer-offline \
   --no-audit \
-  --ignore-scripts \
   ci
-
-ARG SASS_BINARY_SITE
-
-RUN npm rebuild node-sass
-
 COPY assets/ ./
-
 RUN npm run deploy
+
+## -- END building assets with Node.js, npm, and Webpack
+
+# If you're using esbuild which is the default assets 
+# bundler for Phoenix 1.6+, remove the above block
+# and uncomment the following:
+
+## -- BEGIN building assets with esbuild
+#
+# WORKDIR /src
+# COPY assets/ ./assets
+# RUN mix assets.deploy
+# 
+## -- END building assets with esbuild
 
 # -----------------------------------
 # - stage: build
