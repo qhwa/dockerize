@@ -20,7 +20,7 @@
 FROM elixir:<%= elixir_version %> AS elixir-builder
 
 # If you're using a hex mirror:
-# ARG HEX_MIRROR=https://my_hex_mirror
+# ENV HEX_MIRROR=https://my_hex_mirror
 
 RUN mix local.hex --force
 RUN mix local.rebar --force
@@ -60,10 +60,10 @@ ENV LC_ALL en_US.UTF-8
 # -----------------------------------
 FROM elixir-builder AS deps
 
-ARG MIX_ENV=prod
+ENV MIX_ENV=prod
 
 # If you're using a hex mirror:
-# ARG HEX_MIRROR=https://my_hex_mirror
+# ENV HEX_MIRROR=https://my_hex_mirror
 
 WORKDIR /src
 
@@ -77,7 +77,7 @@ COPY mix.exs mix.lock /src/
 
 # If you're using your own organization on hex.pm, uncomment the
 # following lines:
-# ARG HEX_AUTH_KEY
+# ENV HEX_AUTH_KEY
 # RUN mix hex.organization auth my_org --key ${HEX_AUTH_KEY}
 
 RUN mix deps.get --only $MIX_ENV
@@ -89,7 +89,7 @@ RUN mix deps.get --only $MIX_ENV
 FROM deps AS compile_deps
 WORKDIR /src
 
-ARG MIX_ENV=prod
+ENV MIX_ENV=prod
 RUN mix deps.compile
 
 # -----------------------------------
@@ -99,7 +99,7 @@ RUN mix deps.compile
 FROM compile_deps AS compile_app
 WORKDIR /src
 
-ARG MIX_ENV=prod
+ENV MIX_ENV=prod
 
 COPY lib/ ./lib
 
@@ -156,7 +156,7 @@ RUN npm run deploy
 FROM compile_deps AS digest
 WORKDIR /src
 
-ARG MIX_ENV=prod
+ENV MIX_ENV=prod
 
 COPY --from=assets /src/priv ./priv
 
@@ -171,7 +171,7 @@ FROM compile_app AS mix_release
 
 WORKDIR /src
 
-ARG MIX_ENV=prod
+ENV MIX_ENV=prod
 
 <%= if phoenix_assets do %>
 COPY --from=digest /src/priv/static ./priv/static
@@ -185,8 +185,11 @@ RUN mix release --path /app --quiet
 # -----------------------------------
 FROM elixir-runner AS release_image
 
-ARG APP_REVISION=latest
-ARG MIX_ENV=prod
+# If you need to inject the app revision into the container,
+# uncomment below:
+# ARG APP_REVISION=latest
+
+ENV MIX_ENV=prod
 
 USER nobody
 
