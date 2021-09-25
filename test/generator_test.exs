@@ -20,10 +20,20 @@ defmodule DockerizeTest.GeneratorTest do
 
       assert dockerfile =~ """
              # -----------------------------------
-             # - stage: build
+             # - stage: build with NPM
              # - job: assets
              # -----------------------------------
-             FROM deps AS assets
+             ## -- BEGIN assets building with Node.js, NPM and webpack
+             """
+
+      assert dockerfile =~ """
+             ## -- BEGIN building assets with esbuild
+             #
+             # WORKDIR /src
+             # COPY assets/ ./assets
+             # RUN mix assets.deploy
+             # 
+             ## -- END building assets with esbuild
              """
 
       assert release_cfg =~ ":my_phx_app"
