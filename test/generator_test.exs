@@ -19,17 +19,18 @@ defmodule DockerizeTest.GeneratorTest do
       assert dockerfile =~ "--app my_phx_app"
 
       assert dockerfile =~ """
-             # -----------------------------------
-             # - stage: build with NPM
-             # - job: assets
-             # - uncomment if you're using Nodejs,
-             #   NPM and webpack
-             # -----------------------------------
              # ## -- BEGIN assets building with Node.js, NPM and webpack
+             # # -----------------------------------
+             # # - stage: build with NPM
+             # # - job: assets
+             # # - uncomment if you're using Nodejs,
+             # #   NPM and webpack
+             # # -----------------------------------
              """
 
       assert dockerfile =~ """
              ## -- BEGIN building assets with esbuild
+             FROM compile_deps AS digest
              WORKDIR /src
              COPY assets/ ./assets
              RUN mix assets.deploy
