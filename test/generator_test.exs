@@ -22,17 +22,17 @@ defmodule DockerizeTest.GeneratorTest do
              # -----------------------------------
              # - stage: build with NPM
              # - job: assets
+             # - uncomment if you're using Nodejs,
+             #   NPM and webpack
              # -----------------------------------
-             ## -- BEGIN assets building with Node.js, NPM and webpack
+             # ## -- BEGIN assets building with Node.js, NPM and webpack
              """
 
       assert dockerfile =~ """
              ## -- BEGIN building assets with esbuild
-             #
-             # WORKDIR /src
-             # COPY assets/ ./assets
-             # RUN mix assets.deploy
-             # 
+             WORKDIR /src
+             COPY assets/ ./assets
+             RUN mix assets.deploy
              ## -- END building assets with esbuild
              """
 
