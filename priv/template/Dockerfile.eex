@@ -156,6 +156,7 @@ RUN mix compile
 FROM compile_deps AS digest
 WORKDIR /src
 COPY assets/ ./assets
+ENV MIX_ENV=prod
 RUN mix assets.deploy
 ## -- END building assets with esbuild
 <% end %>
@@ -173,6 +174,9 @@ ENV MIX_ENV=prod
 <%= if phoenix_assets do %>
 COPY --from=digest /src/priv/static ./priv/static
 <% end %>
+
+# uncomment if you have customized release config:
+# COPY rel ./rel
 
 RUN mix release --path /app --quiet
 
