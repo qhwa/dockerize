@@ -33,6 +33,7 @@ defmodule DockerizeTest.GeneratorTest do
              FROM compile_deps AS digest
              WORKDIR /src
              COPY assets/ ./assets
+             ENV MIX_ENV=prod
              RUN mix assets.deploy
              ## -- END building assets with esbuild
              """
