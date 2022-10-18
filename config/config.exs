@@ -1,4 +1,4 @@
-use Mix.Config
+import Mix.Config
 
 if Mix.env() != :prod do
   config :git_hooks,

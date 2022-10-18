@@ -27,10 +27,17 @@ RUN apt update && apt install -y git build-essential
 RUN mix local.hex --force
 RUN mix local.rebar --force
 
-RUN mkdir -p /root/.config/rebar3 && \
-  echo '{plugins, [rebar3_hex]}.' > /root/.config/rebar3/rebar.config
-
-RUN /root/.mix/rebar3 plugins upgrade rebar3_hex
+# Uncomment the following lines if the elixir version is less than 1.14.0
+# to set rebar3 up:
+#
+# ---- start of setting rebar3
+#
+# RUN mkdir -p /root/.config/rebar3 && \
+#   echo '{plugins, [rebar3_hex]}.' > /root/.config/rebar3/rebar.config
+#
+# RUN /root/.mix/rebar3 plugins upgrade rebar3_hex
+#
+# ---- end of setting rebar3
 
 # -----------------------------------
 # Base Image #2: Elixir Runner
