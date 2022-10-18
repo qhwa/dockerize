@@ -25,7 +25,7 @@ defmodule Dockerize.MixProject do
   defp deps do
     [
       {:credo, ">= 0.0.0", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.1.0", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.2", only: [:dev, :test], runtime: false},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:git_hooks, "~> 0.4", only: [:dev, :test], runtime: false}
     ]

@@ -12,7 +12,7 @@ defmodule Dockerize.Generate do
   """
 
   @default_output ""
-  @default_elixir_version "1.12.2-erlang-24.1-debian-buster-20210902"
+  @default_elixir_version "1.14.0-erlang-25.1-debian-buster-20220801"
 
   @config_files ~w[config/runtime.exs]
   @docker_files ~w[Dockerfile .dockerignore]
